@@ -4,39 +4,23 @@ import numpy as np
 import pandas as pd
 
 # %%
-# clean City of vancouver data to merge into doordash data
-cityOfVancouver = pd.read_csv("../../raw data/business-licences.csv", sep=';')
-cofV = pd.DataFrame(cityOfVancouver)
-cofV = cofV[["BusinessName","BusinessTradeName", "PostalCode" , "Geom","geo_point_2d"]].rename(columns={
-    'BusinessName': 'parent_company',
-    'BusinessTradeName': 'name',
-    'PostalCode': 'postal_code',
-    'Geom': 'Geom',
-    'geo_point_2d': 'geo_point_2d'
-})
-cofV
-
+# Data to DF
+Activities = pd.read_csv("../../raw data/cultural-spaces.csv", sep = ";").drop(["YEAR", "ACTIVE_SPACE","NUMBER_OF_SEATS","SQUARE_FEET"], axis=1)
+Activities.columns = ["name", "website", "type", "use", "address", "area", "ownership", "Geom", "geo_point_2d"]
+Activities
 
 # %%
-# Merge with yelp data for vancouver
-yelpVan = pd.read_csv("../../raw data/vancouver_yelp_food.csv")
-yelpVan = yelpVan[yelpVan["state"] == "BC"]
-yelpVan = yelpVan.drop(["city","state","business_id","is_open", "BYOBCorkage", "Open24Hours"],axis=1)
-yelpVan
-
-# %%
-# Join the dataset
-mergedVanEats = pd.merge(cofV, yelpVan, on='name', how='inner')
-mergedVanEats = mergedVanEats[mergedVanEats["postal_code_x"] == mergedVanEats["postal_code_y"]]
-mergedVanEats = mergedVanEats[["parent_company","name","postal_code_x","address","latitude","longitude","stars_fair","stars","review_count","categories","RestaurantsReservations","RestaurantsPriceRange2","NoiseLevel","OutdoorSeating","ByAppointmentOnly","DietaryRestrictions","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]]
-mergedVanEats.columns = ["parent_company","name","postal_code","address","latitude","longitude","stars_fair","stars","review_count","categories","RestaurantsReservations","RestaurantsPriceRange2","NoiseLevel","OutdoorSeating","ByAppointmentOnly","DietaryRestrictions","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
-mergedVanEats
+Activities[['latitude', 'longitude']] = Activities['geo_point_2d'].str.split(',', expand=True)
+Activities['latitude'] = pd.to_numeric(Activities['latitude'])
+Activities['longitude'] = pd.to_numeric(Activities['longitude'])
+Activities
 
 # %%
 # Make sure the folder exists
 os.makedirs("../../cleaned", exist_ok=True)
 
 # Export the DataFrame to CSV
-mergedVanEats.to_csv("../../cleaned/VancouverActivities.csv", index=False, encoding='utf-8')
+Activities.to_csv("../../cleaned/VancouverActivities.csv", index=False, encoding='utf-8')
 print("exported Vancouver Restaurant data to cleaned/VancouverActivities.csv")
+
 
