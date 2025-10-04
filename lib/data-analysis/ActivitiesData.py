@@ -34,10 +34,9 @@ mergedVanEats
 
 # %%
 # Make sure the folder exists
-os.makedirs("../../cleaned/", exist_ok=True)
+os.makedirs("../../cleaned", exist_ok=True)
 
 # Export the DataFrame to CSV
-mergedVanEats.to_csv("../../cleaned/VancouverRestaurants.csv", index=False, encoding='utf-8')
-print("exported Vancouver Restaurant data to cleaned/VancouverRestaurants.csv")
-
+mergedVanEats.to_csv("../../cleaned/VancouverActivities.csv", index=False, encoding='utf-8')
+print("exported Vancouver Restaurant data to cleaned/VancouverActivities.csv")
 
