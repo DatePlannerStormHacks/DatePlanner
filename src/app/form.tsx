@@ -155,9 +155,9 @@ export default function DatePlanner() {
       <div className="mx-auto max-w-3xl rounded-2xl bg-white/70 shadow-xl backdrop-blur">
         {/* Header */}
         <header className="relative flex flex-col gap-4 p-6 md:p-8">
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-800">
-            Create the Date
-          </h1>
+          <h1 className="form-title">
+            Plan your perfect date night!
+          </h1> 
 
           {/* Stepper / Breadcrumbs */}
           <div className="w-full">
@@ -211,7 +211,7 @@ export default function DatePlanner() {
             >
               {currentStep.key === "date" && (
                 <section className="space-y-6">
-                  <h2 className="text-xl font-semibold text-slate-800">When?</h2>
+                  <h2 className="step-title">When?</h2>
                   <div className="grid gap-4 sm:max-w-sm">
                     <label className="text-sm font-medium text-slate-700">Pick a date</label>
                     <input
@@ -226,7 +226,7 @@ export default function DatePlanner() {
 
               {currentStep.key === "time" && (
                 <section className="space-y-6">
-                  <h2 className="text-xl font-semibold text-slate-800">What time?</h2>
+                  <h2 className="step-title">What time?</h2>
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:max-w-xl">
                     <div>
                       <label className="text-sm font-medium text-slate-700">Start time</label>
@@ -252,7 +252,7 @@ export default function DatePlanner() {
 
               {currentStep.key === "budget" && (
                 <section className="space-y-6">
-                  <h2 className="text-xl font-semibold text-slate-800">Budget</h2>
+                  <h2 className="step-title">Budget</h2>
                   <div className="sm:max-w-xl">
                     <input
                       type="range"
@@ -278,7 +278,7 @@ export default function DatePlanner() {
 
               {currentStep.key === "activities" && (
                 <section className="space-y-6">
-                  <h2 className="text-xl font-semibold text-slate-800">Pick some activities</h2>
+                  <h2 className="step-title">Pick some activities</h2>
                   <p className="text-sm text-slate-600">Choose any that sound fun. You can always change these later.</p>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                     {activitiesPreset.map((item) => {
@@ -304,7 +304,7 @@ export default function DatePlanner() {
 
               {currentStep.key === "cuisines" && (
                 <section className="space-y-6">
-                  <h2 className="text-xl font-semibold text-slate-800">Restaurant types</h2>
+                  <h2 className="step-title">What kind of food are we feeling?</h2>
                   <p className="text-sm text-slate-600">Select cuisines you both like.</p>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                     {cuisinesPreset.map((item) => {
@@ -330,7 +330,7 @@ export default function DatePlanner() {
 
               {currentStep.key === "review" && (
                 <section className="space-y-6">
-                  <h2 className="text-xl font-semibold text-slate-800">Review & Export</h2>
+                  <h2 className="step-title">Review & Export</h2>
                   <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                     <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
