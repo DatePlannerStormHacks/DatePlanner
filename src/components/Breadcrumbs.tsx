@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { steps, classNames } from "../app/form";
+import { steps, classNames } from "../shared/constants";
 
 interface Step {
   key: string;

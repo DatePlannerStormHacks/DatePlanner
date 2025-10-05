@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { steps, classNames } from "../../../shared/constants";
 
 // ------------------------------------------------------------
 // Date Planner Form
@@ -48,20 +49,7 @@ const cuisinesPreset = [
   "Hot Pot",
 ];
 
-export const steps = [
-  { key: "date", title: "Date" },
-  { key: "time", title: "Time" },
-  { key: "budget", title: "Budget" },
-  { key: "activities", title: "Activities" },
-  { key: "cuisines", title: "Restaurants" },
-  { key: "review", title: "Review & Export" },
-] as const;
-
-type StepKey = (typeof steps)[number]["key"];
-
-export function classNames(...xs: (string | false | undefined)[]) {
-  return xs.filter(Boolean).join(" ");
-}
+// Constants moved to shared/constants.ts to avoid circular dependencies
 
 function budgetLabel(level: number) {
   switch (level) {
