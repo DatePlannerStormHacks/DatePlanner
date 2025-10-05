@@ -8,7 +8,7 @@ import "../../styles/Header.css";
 const ProtectedHeader = () => {
   return (
     <header className="header sticky top-0 z-50 w-full border-b backdrop-blur">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-16 items-center">
         <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <Image
             src="/logo.png"
@@ -19,27 +19,26 @@ const ProtectedHeader = () => {
           />
           <span className="text-xl font-bold text-custom-sage">DatePlanner</span>
         </Link>
-
-        <div className="flex gap-4 items-center">
-          <SignedIn>
-            <Link href="/form">
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-2 px-4 rounded transition-colors">
-                Plan a Date
-              </button>
-            </Link>
-            <Link href="/dashboard">
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-2 px-4 rounded transition-colors">
-                Dashboard
-              </button>
-            </Link>
-            <Link href="/profile">
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-2 px-4 rounded transition-colors">
-                Profile
-              </button>
-            </Link>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
-        </div>
+      </div>
+      <div className="fixed right-0 h-16 flex items-center gap-4 pr-6 z-50" style={{ top: '50%', transform: 'translateY(-50%)' }}>
+        <SignedIn>
+          <Link href="/form">
+            <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-2 px-4 rounded-2xl transition-colors">
+              Plan a Date
+            </button>
+          </Link>
+          <Link href="/dashboard">
+            <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-2 px-4 rounded-2xl transition-colors">
+              Dashboard
+            </button>
+          </Link>
+          <Link href="/profile">
+            <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-2 px-4 rounded-2xl transition-colors">
+              Profile
+            </button>
+          </Link>
+          <UserButton afterSignOutUrl="/" />
+        </SignedIn>
       </div>
     </header>
   );
