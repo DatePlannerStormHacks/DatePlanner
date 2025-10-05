@@ -18,7 +18,7 @@ export default function Breadcrumbs({ currentStep, onStepClick }: BreadcrumbsPro
   return (
     <nav className="w-full bg-white/5 backdrop-blur-md border-t border-indigo-100/20">
       <div className="mx-auto w-full max-w-3xl py-6 px-4 md:px-8">
-        <ol className="flex items-center justify-between gap-4 text-xs md:text-sm font-medium text-indigo-700">
+  <ol className="flex items-center justify-center gap-4 text-xs md:text-sm font-medium text-indigo-700 text-center">
           {steps.map((step: Step, index: number) => (
             <li key={step.key} className="flex-1">
               <button
