@@ -5,6 +5,7 @@ import fs from "fs";
 import csv from "csv-parser";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+
 // Load environment variables from .env file
 dotenv.config();
 const app = express();
@@ -30,22 +31,49 @@ function loadCSV(filePath) {
 // Main itinerary endpoint: Handles POSTreuests to /generate-itinerary --> Expects the front-end to send user input in JSON
 app.post("/generate-itinerary", async (req, res) => {
   try {
-    const userInput = req.body; // e.g., { date, vibe, budget, cuisinePreference }
+    const userInput = req.body; 
 
     //  Load and filter CSV datasets
     const restaurants = await loadCSV("./VancouverRestaurants.csv");
     const activities = await loadCSV("./VancouverActivities.csv");
 
-    // Basic filtering logic to narrow down options based on user input (to improve later) ***********************
-    const filteredRestaurants = restaurants.filter(
-      (r) =>
-        r.vibe.toLowerCase().includes(userInput.vibe.toLowerCase()) ||
-        r.cuisine.toLowerCase().includes(userInput.cuisinePreference?.toLowerCase() || "")
-    );
+    // Filter restaurants based on cuisine keywords and budget --> filtering can be improved more if have time
+    const filteredRestaurants = restaurants.filter((r) => {
+    const categories = r.categories?.toLowerCase() || "";
+    const priceLevel = parseInt(r.RestaurantsPriceRange2) || 0;
 
-    const filteredActivities = activities.filter((a) =>
-      a.vibe.toLowerCase().includes(userInput.vibe.toLowerCase())
-    );
+    // Match if the restaurant's categories have any of the user's cuisine preferences
+    const matchesCuisine =
+        !userInput.cuisines ||
+        userInput.cuisines.some((cuisine) =>
+        categories.includes(cuisine.toLowerCase())
+        );
+
+    // Match on budget (RestaurantsPriceRange2 ranges 1–4)
+    const matchesBudget =
+        !userInput.budget || priceLevel <= parseInt(userInput.budget);
+
+    return matchesCuisine && matchesBudget;
+    });
+
+    // Filter activities based on activity keywords
+    const filteredActivities = activities.filter((a) => {
+    const type = a.type?.toLowerCase() || "";
+    const use = a.use?.toLowerCase() || "";
+
+    // Match if the activity type or use includes any of the user’s selected activities
+    const matchesActivity =
+        !userInput.activities ||
+        userInput.activities.some(
+        (activity) =>
+            type.includes(activity.toLowerCase()) ||
+            use.includes(activity.toLowerCase())
+        );
+
+    return matchesActivity;
+    });
+
+
 
     // Limit size to keep prompt efficient
     const selectedRestaurants = filteredRestaurants.slice(0, 10);
@@ -54,30 +82,29 @@ app.post("/generate-itinerary", async (req, res) => {
     // Create Gemini prompt --> REWORD HOW EVER WE'D PREFER ************************
     // Use the provided data -> use user preferences -> select the best matching options -> return a single itinerary in JSON
     const prompt = `
-You are a Vancouver-based date planner AI.
-Use the following datasets to build ONE ideal itinerary that fits the user's preferences.
+    You are a Vancouver-based date planner.
+    Use the following restaurant and activity data to create ONE ideal date itinerary based on the user's preferences.
 
-User preferences:
-${JSON.stringify(userInput, null, 2)}
+    User preferences:
+    ${JSON.stringify(userInput, null, 2)}
 
-Available restaurants:
-${JSON.stringify(selectedRestaurants, null, 2)}
+    Restaurant options (filtered from CSV):
+    ${JSON.stringify(filteredRestaurants.slice(0, 10), null, 2)}
 
-Available activities:
-${JSON.stringify(selectedActivities, null, 2)}
+    Activity options (filtered from CSV):
+    ${JSON.stringify(filteredActivities.slice(0, 10), null, 2)}
 
-Choose 1 restaurant and 2-3 activities that match the user's vibe, budget, and cuisine preferences.
-Return ONLY JSON in this format:
+    Return ONLY JSON in this format:
+    {
+    "date": "YYYY-MM-DD",
+    "time": {"start": "HH:MM", "end": "HH:MM"},
+    "budgetLevel": number,
+    "budgetLabel": string,
+    "activities": [string],
+    "cuisines": [string]
+    }
+    `;
 
-{
-  "date": "YYYY-MM-DD",
-  "time": {"start": "HH:MM", "end": "HH:MM"},
-  "budgetLevel": number,
-  "budgetLabel": string,
-  "activities": [string],
-  "cuisines": [string]
-}
-`;
 
     // Send to Gemini 
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
