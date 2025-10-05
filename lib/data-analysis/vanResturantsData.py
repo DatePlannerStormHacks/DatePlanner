@@ -5,7 +5,7 @@ import pandas as pd
 
 # %%
 # clean City of vancouver data to merge into doordash data
-cityOfVancouver = pd.read_csv("data/business-licences.csv", sep=';')
+cityOfVancouver = pd.read_csv("../../raw data/business-licences.csv", sep=';')
 cofV = pd.DataFrame(cityOfVancouver)
 cofV = cofV[["BusinessName","BusinessTradeName", "PostalCode" , "Geom","geo_point_2d"]].rename(columns={
     'BusinessName': 'parent_company',
@@ -19,7 +19,7 @@ cofV
 
 # %%
 # Merge with yelp data for vancouver
-yelpVan = pd.read_csv("data/vancouver_yelp_food.csv")
+yelpVan = pd.read_csv("../../raw data/vancouver_yelp_food.csv")
 yelpVan = yelpVan[yelpVan["state"] == "BC"]
 yelpVan = yelpVan.drop(["city","state","business_id","is_open", "BYOBCorkage", "Open24Hours"],axis=1)
 yelpVan
@@ -34,10 +34,10 @@ mergedVanEats
 
 # %%
 # Make sure the folder exists
-os.makedirs("data", exist_ok=True)
+os.makedirs("../../cleaned/", exist_ok=True)
 
 # Export the DataFrame to CSV
-mergedVanEats.to_csv("data/VancouverRestaurants.csv", index=False, encoding='utf-8')
-print("exported Vancouver Restaurant data to data/VancouverRestaurants.csv")
+mergedVanEats.to_csv("../../cleaned/VancouverRestaurants.csv", index=False, encoding='utf-8')
+print("exported Vancouver Restaurant data to cleaned/VancouverRestaurants.csv")
 
 

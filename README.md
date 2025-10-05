@@ -22,18 +22,14 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `src/app/page.tsx`. The page auto-updates as you edit the file.
 
 ## Project Structure
-
+- `cleaned data/` - data analysis files output
 - `src/app/` - Next.js App Router pages and components
-- `src/app/api/` - API routes for handling the date planning pipeline
-  - `generate-options/` - Processes user parameters and creates date options
-  - `create-itinerary/` - Integrates with Gemini API for detailed itineraries
-  - `send-itinerary/` - Handles email and Google Calendar integration
-- `src/lib/services/` - Business logic and API integrations
-- `src/components/` - React components for the user interface
-- `lib/data-analysis/` - Your original data analysis files
+- `lib/data-analysis/` - Original data analysis files
   - `vanEats.ipynb` - Jupyter notebook for restaurant analysis
   - `vanResturantsData.py` - Python script for data processing
-- `data/` - CSV and JSON data files
+  - `ActivityData.ipynb` - Jupyter notebook for activity analysis
+  - `ActivityData.py` - Python script for data processing for activities
+- `raw data/` - CSV and JSON data files
 - `public/` - Static assets
 
 ## API Integration Pipeline

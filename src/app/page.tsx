@@ -1,5 +1,12 @@
-import DatePlanner from "@/components/DatePlanner";
+import DatePlanner from "./form";
 
 export default function Home() {
-  return <DatePlanner />;
+  return (
+    
+    <div>
+      <main>
+        <DatePlanner />
+      </main>
+    </div>
+  );
 }
