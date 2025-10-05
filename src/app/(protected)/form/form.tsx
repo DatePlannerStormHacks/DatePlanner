@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useUser } from '@clerk/nextjs';
 import { steps, classNames } from "../../../shared/constants";
 
 // ------------------------------------------------------------
@@ -84,12 +85,11 @@ interface DatePlannerProps {
   setStepIndex?: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function DatePlanner(props: DatePlannerProps = {}) {
-  const [internalStepIndex, setInternalStepIndex] = useState(0);
-  const stepIndex = props.stepIndex !== undefined ? props.stepIndex : internalStepIndex;
-  const setStepIndex = props.setStepIndex !== undefined ? props.setStepIndex : setInternalStepIndex;
+export default function DatePlannerForm() {
+  const { user } = useUser();
+  const [stepIndex, setStepIndex] = useState(0);
 
-  // form state
+  // Form data states
   const [date, setDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -118,6 +118,8 @@ export default function DatePlanner(props: DatePlannerProps = {}) {
     }>;
   }>>([]);
   const [error, setError] = useState<string | null>(null);
+  const [savingFavorites, setSavingFavorites] = useState<{[key: number]: boolean}>({});
+  const [favoritedItineraries, setFavoritedItineraries] = useState<{[key: number]: string | null}>({});
 
   const currentStep = steps[stepIndex];
 
@@ -180,6 +182,8 @@ export default function DatePlanner(props: DatePlannerProps = {}) {
       const data = await response.json();
       console.log('Received data from API:', data);
       setItineraries(data.itineraries || []);
+      // Reset favorite states when new itineraries are generated
+      setFavoritedItineraries({});
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate itineraries');
       console.error('Error generating itineraries:', err);
@@ -198,6 +202,63 @@ export default function DatePlanner(props: DatePlannerProps = {}) {
   };
 
   const direction = 1; // simple slide; could compute based on index delta
+
+  async function toggleFavorite(itinerary: { theme: string; activities?: Array<{name: string; description: string; time: string; address?: string; estimatedCost?: string}>; timeline?: Array<{name?: string; activity?: string; description?: string; time: string; address?: string; estimatedCost?: string}> }, index: number) {
+    if (!user) {
+      alert('Please sign in to save favorites');
+      return;
+    }
+
+    const isFavorited = favoritedItineraries[index];
+    setSavingFavorites(prev => ({ ...prev, [index]: true }));
+    
+    try {
+      if (isFavorited) {
+        // Remove from favorites
+        const response = await fetch(`/api/favorites?id=${isFavorited}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to remove favorite');
+        }
+
+        setFavoritedItineraries(prev => ({ ...prev, [index]: null }));
+        alert('Itinerary removed from favorites!');
+      } else {
+        // Add to favorites
+        const response = await fetch('/api/favorites', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: `${itinerary.theme || `Itinerary ${index + 1}`} - ${date}`,
+            date,
+            startTime,
+            endTime,
+            budget,
+            activities,
+            cuisines,
+            generatedItinerary: itinerary
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save favorite');
+        }
+
+        const result = await response.json();
+        setFavoritedItineraries(prev => ({ ...prev, [index]: result.id }));
+        alert('Itinerary saved to favorites!');
+      }
+    } catch (err) {
+      console.error('Error toggling favorite:', err);
+      alert('Failed to update favorite. Please try again.');
+    } finally {
+      setSavingFavorites(prev => ({ ...prev, [index]: false }));
+    }
+  }
 
   return (
   <div className="relative overflow-hidden p-6 pt-0 md:p-8 md:pt-0 max-w-2xl mx-auto">
@@ -406,7 +467,33 @@ export default function DatePlanner(props: DatePlannerProps = {}) {
                       const activities = itinerary.activities || itinerary.timeline || [];
                       return (
                         <div key={index} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                          <h4 className="mb-3 text-lg font-semibold text-slate-800">{itinerary.theme || `Itinerary ${index + 1}`}</h4>
+                          <div className="flex justify-between items-center mb-3">
+                            <h4 className="text-lg font-semibold text-slate-800">{itinerary.theme || `Itinerary ${index + 1}`}</h4>
+                            <button
+                              onClick={() => toggleFavorite(itinerary, index)}
+                              disabled={savingFavorites[index]}
+                              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm ${
+                                favoritedItineraries[index] 
+                                  ? 'bg-red-500 text-white hover:bg-red-600 disabled:bg-red-300' 
+                                  : 'bg-pink-600 text-white hover:bg-pink-700 disabled:bg-pink-300'
+                              }`}
+                            >
+                              {savingFavorites[index] ? (
+                                <>
+                                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                  {favoritedItineraries[index] ? 'Removing...' : 'Saving...'}
+                                </>
+                              ) : (
+                                <>
+                                  {favoritedItineraries[index] ? (
+                                    <>💔 Remove Favorite</>
+                                  ) : (
+                                    <>❤️ Save Favorite</>
+                                  )}
+                                </>
+                              )}
+                            </button>
+                          </div>
                           <div className="space-y-4">
                             {activities.length > 0 ? activities.map((activity, actIndex: number) => (
                               <div key={actIndex} className="rounded-xl bg-slate-50 p-4">

@@ -23,8 +23,13 @@ const ProtectedHeader = () => {
         <div className="flex gap-4 items-center">
           <SignedIn>
             <Link href="/form">
-              <button className="bg-custom-mint hover:bg-custom-sage text-white font-black py-2 px-4 rounded transition-colors">
+              <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-2 px-4 rounded transition-colors">
                 Plan a Date
+              </button>
+            </Link>
+            <Link href="/dashboard">
+              <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-black py-2 px-4 rounded transition-colors">
+                Dashboard
               </button>
             </Link>
             <Link href="/profile">

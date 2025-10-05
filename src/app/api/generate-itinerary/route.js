@@ -239,8 +239,23 @@ export async function POST(request) {
       );
     }
 
+    // Add metadata to make it easier to save as favorites
+    const responseWithMetadata = {
+      ...itinerariesResponse,
+      userPreferences: {
+        date: userInput.date,
+        startTime: userInput.time.start,
+        endTime: userInput.time.end,
+        budget: userInput.budgetLevel,
+        budgetLabel: userInput.budgetLabel,
+        activities: userInput.activities,
+        cuisines: userInput.cuisines
+      },
+      generatedAt: new Date().toISOString()
+    };
+
     // Return the 3 itineraries to the frontend
-    return NextResponse.json(itinerariesResponse);
+    return NextResponse.json(responseWithMetadata);
 
   } catch (err) {
     console.error('API Error:', err);
