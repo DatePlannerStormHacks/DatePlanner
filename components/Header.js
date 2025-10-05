@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { ShimmerButton } from "./magicui/shimmer-button";
 import { Button } from "./ui/button";
 import "../styles/Header.css";
@@ -8,13 +9,14 @@ const Header = () => {
   return (
     <header className="header sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <img
             src="./logo.png"
+            alt="DatePlanner Logo"
             className="h-14 w-14 border-2 border-gray-800 rounded-full"
           />
           <span className="text-xl font-bold text-custom-sage">DatePlanner</span>
-        </div>
+        </Link>
 
         <div className="flex gap-4">
           <SignedOut>
