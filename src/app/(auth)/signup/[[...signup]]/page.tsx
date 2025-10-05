@@ -1,20 +1,18 @@
 import { SignUp } from '@clerk/nextjs'
 import './signup.css';  
-import Link from 'next/link';
+import Header from '../../../../../components/Header';
 
 export default function Page() {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Navbar */}
-      <nav className="w-full p-4 bg-gray-800 text-white flex justify-between">
-        <h1 className="text-xl font-bold">MyApp</h1>
-        <Link href="/" className="text-white hover:underline">Home</Link>
-      </nav>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200">
+      <Header />
       
-      <div className="flex flex-col justify-center items-center flex-grow">
-        <SignUp forceRedirectUrl={'/feed'}/>
-     </div>
+      {/* Sign-Up Section */}
+      <div className="flex flex-col justify-center items-center min-h-[calc(100vh-80px)]">
+        <div className="backdrop-blur-sm rounded-lg p-8 shadow-lg" style={{background: 'linear-gradient(135deg, rgba(76, 29, 149, 0.4), rgba(107, 33, 168, 0.2))'}}>
+          <SignUp forceRedirectUrl={'/protected/form'}/>
+        </div>
+      </div>
     </div>
-
   );
 }
