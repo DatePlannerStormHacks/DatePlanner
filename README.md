@@ -1,4 +1,4 @@
-# 💕 DatePlanner
+# DatePlanner
 
 A date planning application that creates personalized, location-based date experiences
 
@@ -12,14 +12,14 @@ A date planning application that creates personalized, location-based date exper
 
 ## ✨ Features
 
-### 🎯 **Smart Date Planning**
+### **Smart Date Planning**
 - **AI-Powered Recommendations**: Uses Google Gemini AI to generate personalized itineraries
 - **Budget-Aware Planning**: Respects your budget constraints with 4-tier system ($, $$, $$$, $$$$)
 - **Real Local Data**: Curated database of 626+ Vancouver restaurants and 709+ activities
 - **Multi-Theme Options**: Generates 3 unique themes per request:
-  - 🌹 Romantic & Intimate
-  - 🎢 Fun & Active  
-  - 🎨 Cultural & Relaxed
+  - Romantic & Intimate
+  - Fun & Active  
+  - Cultural & Relaxed
 
 ### 📱 **Interactive Experience**
 - **Step-by-Step Wizard**: Intuitive form with breadcrumb navigation
@@ -27,18 +27,18 @@ A date planning application that creates personalized, location-based date exper
 - **Smooth Animations**: Powered by Framer Motion for delightful UX
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
 
-### ⭐ **Favorites & Persistence**
+### **Favorites & Persistence**
 - **Save Favorites**: Bookmark your favorite itineraries with one click
 - **Personal Dashboard**: View all saved dates with expandable details
 - **Calendar Integration**: Export to Google Calendar or download ICS files
 - **User Authentication**: Secure login with Clerk authentication
 
-### 🔒 **Secure & Scalable**
+### **Secure & Scalable**
 - **Firebase Backend**: Real-time database with security rules
 - **User Privacy**: Data isolation with user-specific access controls  
 - **Production Ready**: Built with Next.js 15 App Router and TypeScript
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 18+ 
@@ -89,7 +89,7 @@ A date planning application that creates personalized, location-based date exper
 5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## 🏗️ Architecture
+## Architecture
 
 ### Tech Stack
 - **Frontend**: Next.js 15.5.4, React 19, TypeScript
@@ -130,7 +130,7 @@ DatePlanner/
 └── lib/                       # Additional utilities
 ```
 
-## 🎨 User Experience Flow
+## User Experience Flow
 
 ### 1. **Landing Page**
 - Beautiful gradient background with animated elements
@@ -157,7 +157,7 @@ DatePlanner/
 - Calendar export buttons (Google Calendar + ICS download)
 - Delete functionality with confirmation
 
-## 🤖 AI Integration
+## AI Integration
 
 ### Data Processing Pipeline
 1. **User Input** → Date, time, budget, activities, cuisines
@@ -188,7 +188,7 @@ Each timeline entry should include:
 Use ONLY the provided venue data for accurate recommendations.`
 ```
 
-## 🔥 Advanced Features
+## Advanced Features
 
 ### Calendar Integration
 - **Google Calendar**: Direct links with pre-filled event details
@@ -206,7 +206,7 @@ Use ONLY the provided venue data for accurate recommendations.`
 - **Code Splitting**: Automatic route-based code splitting
 - **Caching**: Intelligent caching strategies for API responses
 
-## 🛡️ Security & Privacy
+## Security & Privacy
 
 ### Authentication
 - **Clerk Integration**: Industry-standard authentication
@@ -231,7 +231,7 @@ Ensure all environment variables are set in your deployment platform:
 - `CLERK_SECRET_KEY`
 - `NEXT_PUBLIC_FIREBASE_*` (all Firebase config variables)
 
-## 📊 Data Sources
+## Data Sources
 
 ### Vancouver Restaurant Data (626 entries)
 - Curated from business licenses and Yelp data
@@ -243,16 +243,14 @@ Ensure all environment variables are set in your deployment platform:
 - Activity types, accessibility, pricing
 - Seasonal availability considerations
 
-## 🎯 Future Enhancements
+## Future Enhancements
 
 ### Planned Features
 - [ ] **Multi-City Support**: Expand beyond Vancouver
 - [ ] **Weather Integration**: Weather-aware recommendations
 - [ ] **Group Planning**: Support for group dates and events
-- [ ] **Social Sharing**: Share itineraries with friends
 - [ ] **Review System**: User ratings and feedback
 - [ ] **Advanced Filters**: Dietary restrictions, transportation preferences
-- [ ] **Notification System**: Reminders and updates
 - [ ] **Analytics Dashboard**: Usage insights and popular venues
 
 ### Technical Improvements
@@ -285,16 +283,7 @@ npm run test
 - **Prettier**: Consistent code formatting
 - **Husky**: Pre-commit hooks for code quality
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-
-## 🙏 Acknowledgments
-
-- **Google AI Studio** for Gemini API access
-- **Firebase** for real-time database and hosting
-- **Clerk** for authentication services
-- **Vancouver Open Data** for restaurant and activity datasets
-- **StormHacks 2025** organizers and sponsors
 
