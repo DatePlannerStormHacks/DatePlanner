@@ -10,7 +10,7 @@ A date planning application that creates personalized, location-based date exper
 ![Firebase](https://img.shields.io/badge/Firebase-12.3.0-orange?style=flat-square&logo=firebase)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.14-cyan?style=flat-square&logo=tailwindcss)
 
-## ✨ Features
+## Features
 
 ### **Smart Date Planning**
 - **AI-Powered Recommendations**: Uses Google Gemini AI to generate personalized itineraries
@@ -21,7 +21,7 @@ A date planning application that creates personalized, location-based date exper
   - Fun & Active  
   - Cultural & Relaxed
 
-### 📱 **Interactive Experience**
+### **Interactive Experience**
 - **Step-by-Step Wizard**: Intuitive form with breadcrumb navigation
 - **Real-time Validation**: Smart form validation with visual feedback
 - **Smooth Animations**: Powered by Framer Motion for delightful UX
