@@ -328,7 +328,7 @@ export default function Dashboard() {
                           return (
                             <>
                               <a
-                                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titleFirstHalf)}&dates=${favorite.date.replace(/-/g, '')}T${favorite.startTime.replace(':', '')}00/${favorite.date.replace(/-/g, '')}T${favorite.endTime.replace(':', '')}00&details=${encodeURIComponent('Planned with DatePlanner!')}`}
+                                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titleFirstHalf)}&dates=${favorite.date.replace(/-/g, '')}T${favorite.startTime.replace(':', '')}00/${favorite.date.replace(/-/g, '')}T${favorite.endTime.replace(':', '')}00&details=${encodeURIComponent(`Planned with DatePlanner!${itinerary?.theme ? '\nTheme: ' + itinerary.theme : ''}${itinerary?.highlights && itinerary.highlights.length > 0 ? '\nHighlights: ' + itinerary.highlights.join(', ') : ''}`)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="rounded-full p-2 shadow-md transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-300"
