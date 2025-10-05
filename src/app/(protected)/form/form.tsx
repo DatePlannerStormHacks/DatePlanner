@@ -97,6 +97,28 @@ export default function DatePlanner(props: DatePlannerProps = {}) {
   const [activities, setActivities] = useState<string[]>([]);
   const [cuisines, setCuisines] = useState<string[]>([]);
 
+  // API state
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [itineraries, setItineraries] = useState<Array<{
+    theme: string;
+    activities?: Array<{
+      name: string;
+      description: string;
+      time: string;
+      address?: string;
+      estimatedCost?: string;
+    }>;
+    timeline?: Array<{
+      name?: string;
+      activity?: string;
+      description?: string;
+      time: string;
+      address?: string;
+      estimatedCost?: string;
+    }>;
+  }>>([]);
+  const [error, setError] = useState<string | null>(null);
+
   const currentStep = steps[stepIndex];
 
   const isValid = useMemo(() => {
@@ -117,8 +139,6 @@ export default function DatePlanner(props: DatePlannerProps = {}) {
     }
   }, [currentStep.key, date, startTime, budget]);
 
-  const progress = (stepIndex / (steps.length - 1)) * 100;
-
   function goNext() {
     if (!isValid) return;
     if (stepIndex < steps.length - 1) setStepIndex(stepIndex + 1);
@@ -132,6 +152,40 @@ export default function DatePlanner(props: DatePlannerProps = {}) {
     setList(
       list.includes(item) ? list.filter((x) => x !== item) : [...list, item]
     );
+  }
+
+  async function generateItineraries() {
+    setIsGenerating(true);
+    setError(null);
+    
+    try {
+      const response = await fetch('/api/generate-itinerary', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          date,
+          time: { start: startTime || null, end: endTime || null },
+          budgetLevel: budget,
+          activities,
+          cuisines,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to generate itineraries: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('Received data from API:', data);
+      setItineraries(data.itineraries || []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to generate itineraries');
+      console.error('Error generating itineraries:', err);
+    } finally {
+      setIsGenerating(false);
+    }
   }
 
   const dataForExport = {
@@ -272,7 +326,7 @@ export default function DatePlanner(props: DatePlannerProps = {}) {
           )}
           {currentStep.key === "review" && (
             <section className="space-y-6">
-              <h2 className="step-title">Review & Export</h2>
+              <h2 className="step-title">Review & Generate Itineraries</h2>
               <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                 <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
@@ -300,10 +354,29 @@ export default function DatePlanner(props: DatePlannerProps = {}) {
                   </div>
                 </dl>
               </div>
+
+              {error && (
+                <div className="rounded-2xl border border-red-200 bg-red-50 p-4">
+                  <p className="text-sm text-red-600">{error}</p>
+                </div>
+              )}
+
               <div className="flex flex-wrap items-center gap-3">
                 <button
+                  onClick={generateItineraries}
+                  disabled={isGenerating}
+                  className={classNames(
+                    "rounded-2xl px-5 py-3 font-semibold shadow-md transition focus:outline-none focus:ring-2 focus:ring-indigo-300",
+                    isGenerating
+                      ? "cursor-not-allowed bg-indigo-400 text-white"
+                      : "bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white hover:brightness-110"
+                  )}
+                >
+                  {isGenerating ? "Generating..." : "🎯 Generate 3 Date Ideas"}
+                </button>
+                <button
                   onClick={() => downloadJson("date-plan.json", dataForExport)}
-                  className="rounded-2xl bg-gradient-to-r from-indigo-600 to-fuchsia-600 px-5 py-3 font-semibold text-white shadow-md transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                  className="rounded-2xl border border-slate-300 bg-white px-5 py-3 font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
                 >
                   Export JSON
                 </button>
@@ -316,12 +389,55 @@ export default function DatePlanner(props: DatePlannerProps = {}) {
                     setActivities([]);
                     setCuisines([]);
                     setStepIndex(0);
+                    setItineraries([]);
+                    setError(null);
                   }}
                   className="rounded-2xl border border-slate-300 bg-white px-5 py-3 font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
                 >
                   Reset
                 </button>
               </div>
+
+              {itineraries.length > 0 && (
+                <div className="space-y-6">
+                  <h3 className="text-xl font-bold text-slate-800">Your Date Ideas</h3>
+                  <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-1">
+                    {itineraries.map((itinerary, index) => {
+                      const activities = itinerary.activities || itinerary.timeline || [];
+                      return (
+                        <div key={index} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                          <h4 className="mb-3 text-lg font-semibold text-slate-800">{itinerary.theme || `Itinerary ${index + 1}`}</h4>
+                          <div className="space-y-4">
+                            {activities.length > 0 ? activities.map((activity, actIndex: number) => (
+                              <div key={actIndex} className="rounded-xl bg-slate-50 p-4">
+                                <div className="flex items-start justify-between">
+                                  <div className="flex-1">
+                                    <h5 className="font-medium text-slate-800">{activity.name || 'Activity'}</h5>
+                                    <p className="text-sm text-slate-600">{activity.description || 'No description available'}</p>
+                                    {activity.address && (
+                                      <p className="text-xs text-slate-500 mt-1">📍 {activity.address}</p>
+                                    )}
+                                  </div>
+                                  <div className="ml-4 text-right">
+                                    <p className="text-sm font-medium text-slate-700">{activity.time || 'Time TBD'}</p>
+                                    {activity.estimatedCost && (
+                                      <p className="text-xs text-slate-500">{activity.estimatedCost}</p>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            )) : (
+                              <div className="text-center text-slate-500 py-4">
+                                No activities found for this itinerary
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </section>
           )}
         </motion.div>
