@@ -10,7 +10,7 @@ export default function Page() {
       {/* Sign-In Section */}
       <div className="flex flex-col justify-center items-center min-h-[calc(100vh-80px)]">
         <div className="backdrop-blur-sm rounded-lg p-8 shadow-lg" style={{background: 'linear-gradient(135deg, rgba(76, 29, 149, 0.4), rgba(107, 33, 168, 0.2))'}}>
-          <SignIn forceRedirectUrl={'/protected/form'}/>
+          <SignIn forceRedirectUrl={'/form'}/>
         </div>
       </div>
     </div>
