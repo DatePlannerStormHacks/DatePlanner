@@ -60,6 +60,10 @@ export default function Dashboard() {
     }
   };
 
+  const formatBudget = (budgetLevel: number) => {
+    return '$'.repeat(budgetLevel);
+  };
+
   if (!isLoaded || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -173,7 +177,7 @@ export default function Dashboard() {
                               clipRule="evenodd"
                             />
                           </svg>
-                          Budget: ${favorite.budget}
+                          Budget: {formatBudget(favorite.budget)}
                         </div>
                       </div>
 
