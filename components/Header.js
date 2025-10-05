@@ -1,0 +1,45 @@
+import React from "react";
+import Link from "next/link";
+import { ShimmerButton } from "./magicui/shimmer-button";
+import { Button } from "./ui/button";
+import "../styles/Header.css";
+import { SignInButton, SignUpButton, SignOutButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+
+const Header = () => {
+  return (
+    <header className="header sticky top-0 z-50 w-full border-b backdrop-blur">
+      <div className="container flex h-16 items-center justify-between">
+        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <img
+            src="./logo.png"
+            alt="DatePlanner Logo"
+            className="h-14 w-14 border-2 border-gray-800 rounded-full"
+          />
+          <span className="text-xl font-bold text-custom-sage">DatePlanner</span>
+        </Link>
+
+        <div className="flex gap-4">
+          <SignedOut>
+            <SignInButton>
+              <ShimmerButton className="shadow-2xl">
+                <span className="whitespace-pre-wrap text-center text-sm font-black leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10">
+                  Log In
+                </span>
+              </ShimmerButton>
+            </SignInButton>
+            <SignUpButton>
+              <Button className="bg-custom-mint hover:bg-custom-sage text-white font-black">
+                Sign Up
+              </Button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;

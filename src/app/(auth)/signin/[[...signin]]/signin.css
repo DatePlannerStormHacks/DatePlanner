@@ -1,0 +1,26 @@
+/* Custom styling for Clerk SignIn component */
+.cl-formButtonPrimary {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.cl-formButtonPrimary:hover {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed, #db2777) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+}
+
+.cl-card {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  border-radius: 12px !important;
+}
+
+.cl-headerTitle {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+  
