@@ -85,9 +85,13 @@ interface DatePlannerProps {
   setStepIndex?: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function DatePlannerForm() {
+export default function DatePlannerForm({ stepIndex: externalStepIndex, setStepIndex: externalSetStepIndex }: DatePlannerProps = {}) {
   const { user } = useUser();
-  const [stepIndex, setStepIndex] = useState(0);
+  
+  // Use external step management if provided, otherwise use internal state
+  const [internalStepIndex, setInternalStepIndex] = useState(0);
+  const stepIndex = externalStepIndex ?? internalStepIndex;
+  const setStepIndex = externalSetStepIndex ?? setInternalStepIndex;
 
   // Form data states
   const [date, setDate] = useState("");
