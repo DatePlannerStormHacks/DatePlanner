@@ -22,12 +22,14 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `src/app/page.tsx`. The page auto-updates as you edit the file.
 
 ## Project Structure
-
+- `cleaned data/` - data analysis files output
 - `src/app/` - Next.js App Router pages and components
-- `lib/data-analysis/` - Your original data analysis files
+- `lib/data-analysis/` - Original data analysis files
   - `vanEats.ipynb` - Jupyter notebook for restaurant analysis
   - `vanResturantsData.py` - Python script for data processing
-- `data/` - CSV and JSON data files
+  - `ActivityData.ipynb` - Jupyter notebook for activity analysis
+  - `ActivityData.py` - Python script for data processing for activities
+- `raw data/` - CSV and JSON data files
 - `public/` - Static assets
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
