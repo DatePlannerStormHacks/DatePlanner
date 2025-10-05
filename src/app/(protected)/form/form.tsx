@@ -22,15 +22,15 @@ const activitiesPreset = [
   "Picnic",
   "Museum",
   "Hiking",
-  "Movie Night",
   "Coffee/Tea",
   "Board Games",
-  "Arcade",
-  "Concert",
   "Beach Walk",
-  "Cooking Class",
-  "Bowling",
-  "Mini Golf",
+  "Arts & Crafts",
+  "Dancing",
+  "Nature Walk",
+  "Gallery",
+  "Theater",
+  "Shopping"
 ];
 
 const cuisinesPreset = [
@@ -41,13 +41,16 @@ const cuisinesPreset = [
   "Mexican",
   "Indian",
   "Thai",
-  "Mediterranean",
+  "Mediterranean",  
   "Vegan/Vegetarian",
   "Steakhouse",
   "Cafe/Brunch",
-  "Sushi",
-  "Ramen",
   "Hot Pot",
+  "Seafood",
+  "French",
+  "American",
+  "Middle Eastern",
+  "Vietnamese"
 ];
 
 // Constants moved to shared/constants.ts to avoid circular dependencies
