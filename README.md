@@ -32,6 +32,37 @@ You can start editing the page by modifying `src/app/page.tsx`. The page auto-up
 - `raw data/` - CSV and JSON data files
 - `public/` - Static assets
 
+## API Integration Pipeline
+
+Your DatePlanner follows this complete pipeline:
+
+1. **User Input** → Date, budget, preferences, food type, activities
+2. **Data Processing** → Uses your existing restaurant/park data to generate options
+3. **Option Generation** → Creates 3-5 curated date combinations within budget
+4. **User Selection** → User picks their preferred option
+5. **Gemini AI** → Creates detailed itinerary with timing, links, and recommendations
+6. **Email Service** → Sends beautiful HTML email with full itinerary
+7. **Google Calendar** → Provides direct link to add event to calendar
+
+### Required API Keys
+
+Copy `.env.local.example` to `.env.local` and add your API keys:
+
+- **GEMINI_API_KEY** - Get from [Google AI Studio](https://makersuite.google.com/app/apikey)
+- **RESEND_API_KEY** - Get from [Resend.com](https://resend.com/api-keys)
+
+### API Endpoints
+
+- `POST /api/generate-options` - Generate date options from user parameters
+- `POST /api/create-itinerary` - Create detailed itinerary using Gemini AI
+- `POST /api/send-itinerary` - Send email and create calendar link
+
+### Dependencies to Install
+
+```bash
+npm install @google/generative-ai resend
+```
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
