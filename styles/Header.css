@@ -74,7 +74,7 @@
   max-height: 200px; /* Set max height for scrollable content */
   overflow-y: auto; /* Enable scrolling if results exceed max height */
   background-color: white;
-  border: 1px solid #ccc; /* Border for the box */
+  border: 1px solid #ccc; /* Creates the border */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow for styling */
   z-index: 1000; /* Ensure it appears above other content */
   border-radius: 4px;
