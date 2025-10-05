@@ -4,6 +4,7 @@ import { useUser } from '@clerk/nextjs';
 import { FavoriteItinerary } from '../../../../lib/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProtectedHeader from '@/components/ProtectedHeader';
+import Image from 'next/image';
 
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
@@ -288,16 +289,64 @@ export default function Dashboard() {
 
                     </div>
                     
-                    {/* Click to expand indicator - outside clickable area */}
-                    <div className="px-6 pb-4 pt-2 border-t border-gray-200 flex justify-between items-center bg-gray-50">
-                      <p className="text-xs text-gray-400">
-                        Saved on {favorite.createdAt?.seconds ? 
-                          new Date(favorite.createdAt.seconds * 1000).toLocaleDateString() : 
-                          'Unknown date'}
-                      </p>
-                      <p className="text-xs text-blue-500">
-                        Click above to {expandedItems[favorite.id!] ? 'collapse' : 'expand'} details
-                      </p>
+                    {/* Click to expand indicator and calendar integration */}
+                    <div className="px-6 pb-4 pt-2 border-t border-gray-200 bg-gray-50">
+                      <div className="flex justify-between items-start">
+                        <p className="text-xs text-gray-400">
+                          Saved on {favorite.createdAt?.seconds ? 
+                            new Date(favorite.createdAt.seconds * 1000).toLocaleDateString() : 
+                            'Unknown date'}
+                        </p>
+                        <p className="text-xs text-blue-500">
+                          Click above to {expandedItems[favorite.id!] ? 'collapse' : 'expand'} details
+                        </p>
+                      </div>
+                      
+                      {/* Calendar Integration */}
+                      <div className="flex gap-3 mt-3 justify-center">
+                        {(() => {
+                          const titleFirstHalf = favorite.title.split(/[-–|]/)[0].trim();
+                          
+                          const downloadICS = () => {
+                            const startDate = favorite.date.replace(/-/g, "");
+                            const startTime = favorite.startTime.replace(":", "");
+                            const endTime = favorite.endTime.replace(":", "");
+                            const dtStart = `${startDate}T${startTime}00`;
+                            const dtEnd = `${startDate}T${endTime}00`;
+                            const icsContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//DatePlanner//EN\nBEGIN:VEVENT\nUID:${favorite.id}@dateplanner\nDTSTAMP:${dtStart}\nDTSTART:${dtStart}\nDTEND:${dtEnd}\nSUMMARY:${titleFirstHalf}\nDESCRIPTION:Planned with DatePlanner!\nEND:VEVENT\nEND:VCALENDAR`;
+                            const blob = new Blob([icsContent.replace(/\n/g, "\r\n")], { type: "text/calendar" });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement("a");
+                            a.href = url;
+                            a.download = `${titleFirstHalf || "event"}.ics`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                          };
+
+                          return (
+                            <>
+                              <a
+                                href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titleFirstHalf)}&dates=${favorite.date.replace(/-/g, '')}T${favorite.startTime.replace(':', '')}00/${favorite.date.replace(/-/g, '')}T${favorite.endTime.replace(':', '')}00&details=${encodeURIComponent('Planned with DatePlanner!')}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded-full p-2 shadow-md transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                                title="Add to Google Calendar"
+                              >
+                                <Image src="/googleCalendar.png" alt="Google Calendar" width={32} height={32} />
+                              </a>
+                              <button
+                                onClick={downloadICS}
+                                className="rounded-full p-2 shadow-md transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                title="Download ICS for Apple/Outlook"
+                              >
+                                <Image src="/outlookCalendar.png" alt="Apple/Outlook Calendar" width={32} height={32} />
+                              </button>
+                            </>
+                          );
+                        })()}
+                      </div>
                     </div>
                   </motion.div>
                 );
