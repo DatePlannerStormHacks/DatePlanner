@@ -2,7 +2,7 @@ import React from "react";
 import { ShimmerButton } from "./magicui/shimmer-button";
 import { Button } from "./ui/button";
 import "../styles/Header.css";
-import { SignInButton, SignUpButton, SignOutButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton, SignOutButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const Header = () => {
   return (
@@ -17,14 +17,23 @@ const Header = () => {
         </div>
 
         <div className="flex gap-4">
-          <ShimmerButton className="shadow-2xl">
-            <span className="whitespace-pre-wrap text-center text-sm font-black leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10">
-              Log In
-            </span>
-          </ShimmerButton>
-          <Button className="bg-custom-mint hover:bg-custom-sage text-white font-black">
-            Sign Up
-          </Button>
+          <SignedOut>
+            <SignInButton>
+              <ShimmerButton className="shadow-2xl">
+                <span className="whitespace-pre-wrap text-center text-sm font-black leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10">
+                  Log In
+                </span>
+              </ShimmerButton>
+            </SignInButton>
+            <SignUpButton>
+              <Button className="bg-custom-mint hover:bg-custom-sage text-white font-black">
+                Sign Up
+              </Button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </div>
       </div>
     </header>
