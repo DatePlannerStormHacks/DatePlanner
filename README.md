@@ -4,6 +4,11 @@ A date planning application that creates personalized, location-based date exper
 
 **DatePlanner** is an intelligent date planning application that uses Gemeni AI to generate custom itineraries based on your preferences, budget, and location. Built for StormHacks 2025, it combines real Vancouver data with Google's Gemini AI to create perfect date experiences.
 
+The application uses curated data from:
+- Vancouver's Open Data Portal
+- Yelp Dataset
+- Local business and cultural space information
+
 ![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-19.1.0-blue?style=flat-square&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
