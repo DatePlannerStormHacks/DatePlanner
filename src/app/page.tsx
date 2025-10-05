@@ -19,7 +19,7 @@ export default function LandingPage() {
       <main className="container mx-auto px-4 py-16">
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            Plan Your Perfect Date with AI
+            Plan Your Perfect Date
           </h1>
           <p className="text-xl text-gray-700 mb-8 leading-relaxed">
             DatePlanner uses artificial intelligence to create personalized date experiences 
