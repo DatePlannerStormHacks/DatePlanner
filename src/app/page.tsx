@@ -82,7 +82,7 @@ export default function LandingPage() {
           <div className="bg-white/70 backdrop-blur-sm rounded-lg p-6 text-center">
             <div className="text-4xl mb-4">📅</div>
             <h3 className="text-xl font-semibold mb-2 text-black">Calendar Ready</h3>
-            <p className="text-gray-600">Automatically sync with your Google Calendar</p>
+            <p className="text-gray-600">Have it synced with your Google or Outlook Calendar</p>
           </div>
         </div>
       </main>
