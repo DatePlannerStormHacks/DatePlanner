@@ -1,81 +1,289 @@
 # DatePlanner
-StormHacks 2025 Date planner app
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+A date planning application that creates personalized, location-based date experiences
 
-## Getting Started
+**DatePlanner** is an intelligent date planning application that uses Gemeni AI to generate custom itineraries based on your preferences, budget, and location. Built for StormHacks 2025, it combines real Vancouver data with Google's Gemini AI to create perfect date experiences.
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-19.1.0-blue?style=flat-square&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
+![Firebase](https://img.shields.io/badge/Firebase-12.3.0-orange?style=flat-square&logo=firebase)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.14-cyan?style=flat-square&logo=tailwindcss)
 
-```bash
+## ✨ Features
+
+### **Smart Date Planning**
+- **AI-Powered Recommendations**: Uses Google Gemini AI to generate personalized itineraries
+- **Budget-Aware Planning**: Respects your budget constraints with 4-tier system ($, $$, $$$, $$$$)
+- **Real Local Data**: Curated database of 626+ Vancouver restaurants and 709+ activities
+- **Multi-Theme Options**: Generates 3 unique themes per request:
+  - Romantic & Intimate
+  - Fun & Active  
+  - Cultural & Relaxed
+
+### 📱 **Interactive Experience**
+- **Step-by-Step Wizard**: Intuitive form with breadcrumb navigation
+- **Real-time Validation**: Smart form validation with visual feedback
+- **Smooth Animations**: Powered by Framer Motion for delightful UX
+- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
+
+### **Favorites & Persistence**
+- **Save Favorites**: Bookmark your favorite itineraries with one click
+- **Personal Dashboard**: View all saved dates with expandable details
+- **Calendar Integration**: Export to Google Calendar or download ICS files
+- **User Authentication**: Secure login with Clerk authentication
+
+### **Secure & Scalable**
+- **Firebase Backend**: Real-time database with security rules
+- **User Privacy**: Data isolation with user-specific access controls  
+- **Production Ready**: Built with Next.js 15 App Router and TypeScript
+
+## Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- Firebase project
+- Google AI Studio API key
+- Clerk account
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/BambooShampoo/DatePlanner.git
+   cd DatePlanner
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Environment Setup**
+   ```bash
+   cp .env.local.example .env.local
+   ```
+   
+   Fill in your API keys:
+   ```env
+   # Google AI (Gemini)
+   GEMINI_API_KEY=your_gemini_api_key_here
+   
+   # Clerk Authentication
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+   CLERK_SECRET_KEY=your_clerk_secret_key
+   
+   # Firebase Configuration
+   NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+   # ... other Firebase config
+   ```
+
+4. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Architecture
+
+### Tech Stack
+- **Frontend**: Next.js 15.5.4, React 19, TypeScript
+- **Styling**: Tailwind CSS 4.1.14, custom CSS modules
+- **Animations**: Framer Motion 12.23.22
+- **Authentication**: Clerk (secure, production-ready)
+- **Database**: Firebase Firestore (NoSQL, real-time)
+- **AI**: Google Gemini 2.5 Flash model
+- **Deployment**: Vercel-ready with optimizations
+
+### Project Structure
+```
+DatePlanner/
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── (auth)/            # Authentication routes
+│   │   ├── (protected)/       # Protected routes (requires login)
+│   │   │   ├── dashboard/     # Favorites dashboard
+│   │   │   └── form/          # Date planning wizard
+│   │   ├── api/               # API routes
+│   │   │   ├── favorites/     # CRUD for saved itineraries
+│   │   │   └── generate-itinerary/ # AI itinerary generation
+│   │   ├── globals.css        # Global styles
+│   │   └── page.tsx           # Landing page
+│   ├── components/            # Reusable UI components
+│   │   ├── Breadcrumbs.tsx    # Step navigation
+│   │   ├── Header.tsx         # Public header
+│   │   └── ProtectedHeader.tsx # Authenticated header
+│   ├── lib/                   # Utilities and configurations
+│   │   ├── firebase.ts        # Firebase setup
+│   │   └── firestore.ts       # Database operations
+│   └── shared/                # Shared constants and types
+├── public/                    # Static assets
+├── cleaned/                   # Curated Vancouver data
+│   ├── VancouverRestaurants.csv # 626 restaurant entries
+│   └── VancouverActivities.csv  # 709 activity entries
+├── data/                      # Raw datasets
+└── lib/                       # Additional utilities
+```
+
+## User Experience Flow
+
+### 1. **Landing Page**
+- Beautiful gradient background with animated elements
+- Clear value proposition and call-to-action
+- Conditional header based on authentication status
+
+### 2. **Date Planning Wizard**
+- **Step 1**: Select your date
+- **Step 2**: Choose time range (start/end times)
+- **Step 3**: Set budget level with visual slider
+- **Step 4**: Pick preferred activities (multi-select chips)
+- **Step 5**: Choose cuisine preferences
+- **Step 6**: Review and generate itineraries
+
+### 3. **AI-Generated Results**
+- 3 unique themed itineraries with detailed timelines
+- Real venue names, addresses, and descriptions
+- Cost estimates and activity types
+- One-click favorite saving with visual feedback
+
+### 4. **Personal Dashboard**
+- Grid layout of saved favorites with consistent sizing
+- Expandable cards showing full itinerary details
+- Calendar export buttons (Google Calendar + ICS download)
+- Delete functionality with confirmation
+
+## AI Integration
+
+### Data Processing Pipeline
+1. **User Input** → Date, time, budget, activities, cuisines
+2. **Data Filtering** → Filters 1,300+ entries based on preferences
+3. **Smart Selection** → Picks relevant venues within budget/location
+4. **AI Generation** → Gemini creates 3 themed itineraries with:
+   - Logical time progression
+   - Venue-specific details
+   - Realistic cost estimates
+   - Transportation considerations
+
+### Gemini AI Prompt Engineering
+```javascript
+// Sophisticated prompt ensures quality output
+const prompt = `You are an expert date planner for Vancouver, Canada...
+Create 3 distinct itineraries with different themes:
+1. Romantic & Intimate
+2. Fun & Active  
+3. Cultural & Relaxed
+
+Each timeline entry should include:
+- Specific activity name (not generic "Activity")
+- Detailed description
+- Exact timing
+- Location/address
+- Type classification
+
+Use ONLY the provided venue data for accurate recommendations.`
+```
+
+## Advanced Features
+
+### Calendar Integration
+- **Google Calendar**: Direct links with pre-filled event details
+- **ICS Export**: Universal calendar format for Apple/Outlook
+- **Smart Parsing**: Extracts meaningful event titles from itinerary themes
+
+### Responsive Design
+- **Mobile-First**: Optimized for all screen sizes
+- **Touch-Friendly**: Large tap targets and swipe gestures
+- **Progressive Enhancement**: Works without JavaScript
+
+### Performance Optimizations
+- **Next.js 15**: Latest features including Turbopack
+- **Image Optimization**: Automatic WebP conversion and lazy loading
+- **Code Splitting**: Automatic route-based code splitting
+- **Caching**: Intelligent caching strategies for API responses
+
+## Security & Privacy
+
+### Authentication
+- **Clerk Integration**: Industry-standard authentication
+- **Protected Routes**: Server-side route protection
+- **Session Management**: Secure JWT handling
+
+### Data Security
+- **Firestore Rules**: User-specific data access controls
+- **Server-Side API**: Sensitive operations handled server-side
+- **Environment Variables**: Secure API key management
+
+### Privacy
+- **User Data Isolation**: Each user only sees their own data
+- **Minimal Data Collection**: Only collects necessary planning information
+- **Secure Deletion**: Complete data removal on account deletion
+
+
+### Environment Variables for Production
+Ensure all environment variables are set in your deployment platform:
+- `GEMINI_API_KEY`
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
+- `NEXT_PUBLIC_FIREBASE_*` (all Firebase config variables)
+
+## Data Sources
+
+### Vancouver Restaurant Data (626 entries)
+- Curated from business licenses and Yelp data
+- Includes cuisine types, price ranges, locations
+- Filtered for date-appropriate venues
+
+### Vancouver Activities Data (709 entries)  
+- Cultural spaces, parks, attractions
+- Activity types, accessibility, pricing
+- Seasonal availability considerations
+
+## Future Enhancements
+
+### Planned Features
+- [ ] **Multi-City Support**: Expand beyond Vancouver
+- [ ] **Weather Integration**: Weather-aware recommendations
+- [ ] **Group Planning**: Support for group dates and events
+- [ ] **Review System**: User ratings and feedback
+- [ ] **Advanced Filters**: Dietary restrictions, transportation preferences
+- [ ] **Analytics Dashboard**: Usage insights and popular venues
+
+### Technical Improvements
+- [ ] **PWA Support**: Offline functionality and app installation
+- [ ] **Real-time Updates**: Live venue availability and pricing
+- [ ] **Advanced Caching**: Redis integration for better performance
+- [ ] **A/B Testing**: Optimize user experience with experiments
+- [ ] **Monitoring**: Application performance monitoring
+- [ ] **Internationalization**: Multi-language support
+
+# Install dependencies
+npm install
+
+# Run in development mode with hot reload
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Run type checking
+npm run type-check
+
+# Run linting
+npm run lint
+
+# Run tests
+npm run test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Code Style
+- **TypeScript**: Strict mode enabled
+- **ESLint**: Next.js recommended configuration
+- **Prettier**: Consistent code formatting
+- **Husky**: Pre-commit hooks for code quality
 
-You can start editing the page by modifying `src/app/page.tsx`. The page auto-updates as you edit the file.
+## License
 
-## Project Structure
-- `cleaned data/` - data analysis files output
-- `src/app/` - Next.js App Router pages and components
-- `lib/data-analysis/` - Original data analysis files
-  - `vanEats.ipynb` - Jupyter notebook for restaurant analysis
-  - `vanResturantsData.py` - Python script for data processing
-  - `ActivityData.ipynb` - Jupyter notebook for activity analysis
-  - `ActivityData.py` - Python script for data processing for activities
-- `raw data/` - CSV and JSON data files
-- `public/` - Static assets
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## API Integration Pipeline
-
-Your DatePlanner follows this complete pipeline:
-
-1. **User Input** → Date, budget, preferences, food type, activities
-2. **Data Processing** → Uses your existing restaurant/park data to generate options
-3. **Option Generation** → Creates 3-5 curated date combinations within budget
-4. **User Selection** → User picks their preferred option
-5. **Gemini AI** → Creates detailed itinerary with timing, links, and recommendations
-6. **Email Service** → Sends beautiful HTML email with full itinerary
-7. **Google Calendar** → Provides direct link to add event to calendar
-
-### Required API Keys
-
-Copy `.env.local.example` to `.env.local` and add your API keys:
-
-- **GEMINI_API_KEY** - Get from [Google AI Studio](https://makersuite.google.com/app/apikey)
-- **RESEND_API_KEY** - Get from [Resend.com](https://resend.com/api-keys)
-
-### API Endpoints
-
-- `POST /api/generate-options` - Generate date options from user parameters
-- `POST /api/create-itinerary` - Create detailed itinerary using Gemini AI
-- `POST /api/send-itinerary` - Send email and create calendar link
-
-### Dependencies to Install
-
-```bash
-npm install @google/generative-ai resend
-```
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
