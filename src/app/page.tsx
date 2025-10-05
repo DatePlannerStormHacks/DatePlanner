@@ -1,36 +1,8 @@
 import Header from "../../components/Header";
-import "../../styles/Header.css";
+import ProtectedHeader from "../components/ProtectedHeader";
 
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
-
-const ProtectedHeader = () => {
-  return (
-    <header className="header sticky top-0 z-50 w-full border-b backdrop-blur">
-      <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <img
-            src="./logo.png"
-            alt="DatePlanner Logo"
-            className="h-14 w-14 border-2 border-gray-800 rounded-full"
-          />
-          <span className="text-xl font-bold text-custom-sage">DatePlanner</span>
-        </Link>
-
-        <div className="flex gap-4 items-center">
-          <SignedIn>
-            <Link href="/profile">
-              <button className="bg-custom-mint hover:bg-custom-sage text-white font-black py-2 px-4 rounded transition-colors">
-                Profile
-              </button>
-            </Link>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
-        </div>
-      </div>
-    </header>
-  );
-};
 
 export default function LandingPage() {
   return (
@@ -52,7 +24,7 @@ export default function LandingPage() {
           <p className="text-xl text-gray-700 mb-8 leading-relaxed">
             DatePlanner uses artificial intelligence to create personalized date experiences 
             tailored to your budget, preferences, and location. From romantic dinners to 
-            adventure activities - we've got you covered.
+            adventure activities - we&apos;ve got you covered.
           </p>
 
           {/* Different content for signed in vs signed out users */}
