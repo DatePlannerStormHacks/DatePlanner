@@ -7,7 +7,7 @@ import "../../styles/Header.css";
 
 const ProtectedHeader = () => {
   return (
-    <header className="header sticky top-0 z-50 w-full bg-[#211034] border-b backdrop-blur">
+    <header className="header sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="container flex h-16 items-center">
         <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <Image
