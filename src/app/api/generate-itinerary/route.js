@@ -144,6 +144,15 @@ export async function POST(request) {
     2. Fun & Active
     3. Cultural & Relaxed
 
+    IMPORTANT: Use specific, descriptive activity names that reflect what you're actually doing, not generic labels like "Activity". 
+    Examples of good activity names:
+    - "Dinner at [Restaurant Name]" 
+    - "Stroll through Stanley Park Seawall"
+    - "Coffee and pastries at [Cafe Name]"
+    - "Visit Vancouver Art Gallery"
+    - "Sunset viewing at English Bay"
+    - "Wine tasting at [Venue]"
+
     Return ONLY valid JSON in this exact format:
     {
       "itineraries": [
@@ -157,9 +166,9 @@ export async function POST(request) {
           "timeline": [
             {
               "time": "HH:MM",
-              "activity": "Activity Name",
-              "location": "Location Name",
-              "description": "Brief description",
+              "activity": "Specific descriptive activity name (e.g., 'Dinner at Blue Water Cafe', 'Walk through Dr. Sun Yat-Sen Classical Chinese Garden')",
+              "location": "Exact location name from the data provided",
+              "description": "Detailed description of what makes this special",
               "type": "restaurant|activity"
             }
           ],
@@ -176,9 +185,9 @@ export async function POST(request) {
           "timeline": [
             {
               "time": "HH:MM",
-              "activity": "Activity Name",
-              "location": "Location Name",
-              "description": "Brief description",
+              "activity": "Specific descriptive activity name that conveys the action",
+              "location": "Exact venue name or specific location",
+              "description": "What makes this experience fun and engaging",
               "type": "restaurant|activity"
             }
           ],
@@ -195,9 +204,9 @@ export async function POST(request) {
           "timeline": [
             {
               "time": "HH:MM",
-              "activity": "Activity Name",
-              "location": "Location Name",
-              "description": "Brief description",
+              "activity": "Specific cultural or relaxing activity name",
+              "location": "Museum, gallery, park, or cultural venue name",
+              "description": "Educational or peaceful experience details",
               "type": "restaurant|activity"
             }
           ],

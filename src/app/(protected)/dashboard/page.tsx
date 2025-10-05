@@ -11,6 +11,7 @@ export default function Dashboard() {
   const [favorites, setFavorites] = useState<FavoriteItinerary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [expandedItems, setExpandedItems] = useState<{[key: string]: boolean}>({});
 
   const loadFavorites = useCallback(async () => {
     if (!user) return;
@@ -65,6 +66,13 @@ export default function Dashboard() {
     return '$'.repeat(budgetLevel);
   };
 
+  const toggleExpanded = (favoriteId: string) => {
+    setExpandedItems(prev => ({
+      ...prev,
+      [favoriteId]: !prev[favoriteId]
+    }));
+  };
+
   if (!isLoaded || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -116,7 +124,7 @@ export default function Dashboard() {
             </a>
           </div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
             <AnimatePresence>
               {favorites.map((favorite) => {
                 const itinerary = parseItinerary(favorite.generatedItinerary);
@@ -126,15 +134,21 @@ export default function Dashboard() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow w-full flex flex-col min-h-[400px]"
                   >
-                    <div className="p-6">
+                    <div 
+                      className="p-6 cursor-pointer flex-grow"
+                      onClick={() => toggleExpanded(favorite.id!)}
+                    >
                       <div className="flex justify-between items-start mb-4">
                         <h3 className="text-xl font-semibold text-gray-800">
                           {favorite.title}
                         </h3>
                         <button
-                          onClick={() => handleDeleteFavorite(favorite.id!)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteFavorite(favorite.id!);
+                          }}
                           className="text-red-500 hover:text-red-700 transition-colors"
                           title="Delete favorite"
                         >
@@ -212,35 +226,107 @@ export default function Dashboard() {
                         </div>
                       )}
 
-                      <div className="mt-4 pt-4 border-t border-gray-200">
+                      {/* Expandable detailed content */}
+                      <AnimatePresence>
+                        {expandedItems[favorite.id!] && itinerary && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="mt-4 pt-4 border-t border-gray-200"
+                          >
+                            <h4 className="font-semibold text-gray-800 mb-3">Detailed Itinerary:</h4>
+                            <div className="space-y-3">
+                              {(itinerary.activities || itinerary.timeline || []).map((activity: {name?: string; activity?: string; description?: string; time?: string; address?: string; estimatedCost?: string; type?: string}, actIndex: number) => (
+                                <div key={actIndex} className="bg-gray-50 rounded-lg p-3">
+                                  <div className="flex justify-between items-start">
+                                    <div className="flex-1">
+                                      <h5 className="font-medium text-gray-800 text-sm">
+                                        {activity.name || activity.activity || 'Activity'}
+                                      </h5>
+                                      <p className="text-xs text-gray-600 mt-1">
+                                        {activity.description || 'No description available'}
+                                      </p>
+                                      {activity.address && (
+                                        <p className="text-xs text-gray-500 mt-1">
+                                          📍 {activity.address}
+                                        </p>
+                                      )}
+                                      {activity.type && (
+                                        <span className="inline-block mt-1 px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">
+                                          {activity.type}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="ml-3 text-right">
+                                      <p className="text-xs font-medium text-gray-700">
+                                        {activity.time || 'Time TBD'}
+                                      </p>
+                                      {activity.estimatedCost && (
+                                        <p className="text-xs text-gray-500">
+                                          {activity.estimatedCost}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            {itinerary.highlights && itinerary.highlights.length > 0 && (
+                              <div className="mt-4">
+                                <h5 className="font-medium text-gray-800 text-sm mb-2">Highlights:</h5>
+                                <ul className="list-disc list-inside space-y-1">
+                                  {itinerary.highlights.map((highlight: string, index: number) => (
+                                    <li key={index} className="text-xs text-gray-600">{highlight}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                    </div>
+                    
+                    {/* Click to expand indicator and calendar integration */}
+                    <div className="px-6 pb-4 pt-2 border-t border-gray-200 bg-gray-50">
+                      <div className="flex justify-between items-start">
                         <p className="text-xs text-gray-400">
                           Saved on {favorite.createdAt?.seconds ? 
                             new Date(favorite.createdAt.seconds * 1000).toLocaleDateString() : 
                             'Unknown date'}
                         </p>
-                        <div className="flex gap-3 mt-4">
-                          {/* Use only the first half of the title for calendar event */}
-                          {(() => {
-                            const titleFirstHalf = favorite.title.split(/[-–|]/)[0].trim();
-                            // Helper to download ICS file
-                            function downloadICS() {
-                              const startDate = favorite.date.replace(/-/g, "");
-                              const startTime = favorite.startTime.replace(":", "");
-                              const endTime = favorite.endTime.replace(":", "");
-                              const dtStart = `${startDate}T${startTime}00`;
-                              const dtEnd = `${startDate}T${endTime}00`;
-                              const icsContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//DatePlanner//EN\nBEGIN:VEVENT\nUID:${favorite.id}@dateplanner\nDTSTAMP:${dtStart}\nDTSTART:${dtStart}\nDTEND:${dtEnd}\nSUMMARY:${titleFirstHalf}\nDESCRIPTION:Planned with DatePlanner!\nEND:VEVENT\nEND:VCALENDAR`;
-                              const blob = new Blob([icsContent.replace(/\n/g, "\r\n")], { type: "text/calendar" });
-                              const url = URL.createObjectURL(blob);
-                              const a = document.createElement("a");
-                              a.href = url;
-                              a.download = `${titleFirstHalf || "event"}.ics`;
-                              document.body.appendChild(a);
-                              a.click();
-                              document.body.removeChild(a);
-                              URL.revokeObjectURL(url);
-                            }
-                            return <>
+                        <p className="text-xs text-blue-500">
+                          Click above to {expandedItems[favorite.id!] ? 'collapse' : 'expand'} details
+                        </p>
+                      </div>
+                      
+                      {/* Calendar Integration */}
+                      <div className="flex gap-3 mt-3 justify-center">
+                        {(() => {
+                          const titleFirstHalf = favorite.title.split(/[-–|]/)[0].trim();
+                          
+                          const downloadICS = () => {
+                            const startDate = favorite.date.replace(/-/g, "");
+                            const startTime = favorite.startTime.replace(":", "");
+                            const endTime = favorite.endTime.replace(":", "");
+                            const dtStart = `${startDate}T${startTime}00`;
+                            const dtEnd = `${startDate}T${endTime}00`;
+                            const icsContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//DatePlanner//EN\nBEGIN:VEVENT\nUID:${favorite.id}@dateplanner\nDTSTAMP:${dtStart}\nDTSTART:${dtStart}\nDTEND:${dtEnd}\nSUMMARY:${titleFirstHalf}\nDESCRIPTION:Planned with DatePlanner!\nEND:VEVENT\nEND:VCALENDAR`;
+                            const blob = new Blob([icsContent.replace(/\n/g, "\r\n")], { type: "text/calendar" });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement("a");
+                            a.href = url;
+                            a.download = `${titleFirstHalf || "event"}.ics`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                          };
+
+                          return (
+                            <>
                               <a
                                 href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titleFirstHalf)}&dates=${favorite.date.replace(/-/g, '')}T${favorite.startTime.replace(':', '')}00/${favorite.date.replace(/-/g, '')}T${favorite.endTime.replace(':', '')}00&details=${encodeURIComponent('Planned with DatePlanner!')}`}
                                 target="_blank"
@@ -257,9 +343,9 @@ export default function Dashboard() {
                               >
                                 <Image src="/outlookCalendar.png" alt="Apple/Outlook Calendar" width={32} height={32} />
                               </button>
-                            </>;
-                          })()}
-                        </div>
+                            </>
+                          );
+                        })()}
                       </div>
                     </div>
                   </motion.div>

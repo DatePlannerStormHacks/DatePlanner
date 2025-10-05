@@ -499,7 +499,11 @@ export default function DatePlannerForm() {
                               <div key={actIndex} className="rounded-xl bg-slate-50 p-4">
                                 <div className="flex items-start justify-between">
                                   <div className="flex-1">
-                                    <h5 className="font-medium text-slate-800">{activity.name || 'Activity'}</h5>
+                                    <h5 className="font-medium text-slate-800">
+                                      {activity.name || 
+                                       ('activity' in activity ? activity.activity : null) || 
+                                       'Activity'}
+                                    </h5>
                                     <p className="text-sm text-slate-600">{activity.description || 'No description available'}</p>
                                     {activity.address && (
                                       <p className="text-xs text-slate-500 mt-1">📍 {activity.address}</p>
