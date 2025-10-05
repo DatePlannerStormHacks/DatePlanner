@@ -280,7 +280,7 @@ export default function DatePlannerForm() {
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 bg-white p-3 shadow-sm outline-none ring-indigo-300 placeholder-slate-400 focus:ring"
+                  className="w-full rounded-xl border border-slate-300 bg-white p-3 shadow-sm outline-none ring-indigo-300 placeholder-slate-400 focus:ring text-black"
                 />
               </div>
             </section>
@@ -295,16 +295,16 @@ export default function DatePlannerForm() {
                     type="time"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="mt-2 w-full rounded-xl border border-slate-300 bg-white p-3 shadow-sm outline-none ring-indigo-300 placeholder-slate-400 focus:ring"
+                    className="mt-2 w-full rounded-xl border border-slate-300 bg-white p-3 shadow-sm outline-none ring-indigo-300 placeholder-slate-400 focus:ring text-black"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-700">End time (optional)</label>
+                  <label className="text-sm font-medium text-slate-700">End time</label>
                   <input
                     type="time"
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
-                    className="mt-2 w-full rounded-xl border border-slate-300 bg-white p-3 shadow-sm outline-none ring-indigo-300 placeholder-slate-400 focus:ring"
+                    className="mt-2 w-full rounded-xl border border-slate-300 bg-white p-3 shadow-sm outline-none ring-indigo-300 placeholder-slate-400 focus:ring text-black"
                   />
                 </div>
               </div>

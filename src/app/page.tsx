@@ -69,19 +69,19 @@ export default function LandingPage() {
         <div className="mt-20 grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           <div className="bg-white/70 backdrop-blur-sm rounded-lg p-6 text-center">
             <div className="text-4xl mb-4">🤖</div>
-            <h3 className="text-xl font-semibold mb-2">AI-Powered</h3>
+            <h3 className="text-xl font-semibold mb-2 text-black">AI-Powered</h3>
             <p className="text-gray-600">Smart recommendations based on your preferences and budget</p>
           </div>
           
           <div className="bg-white/70 backdrop-blur-sm rounded-lg p-6 text-center">
             <div className="text-4xl mb-4">💝</div>
-            <h3 className="text-xl font-semibold mb-2">Personalized</h3>
+            <h3 className="text-xl font-semibold mb-2 text-black">Personalized</h3>
             <p className="text-gray-600">Tailored experiences for every couple and occasion</p>
           </div>
           
           <div className="bg-white/70 backdrop-blur-sm rounded-lg p-6 text-center">
             <div className="text-4xl mb-4">📅</div>
-            <h3 className="text-xl font-semibold mb-2">Calendar Ready</h3>
+            <h3 className="text-xl font-semibold mb-2 text-black">Calendar Ready</h3>
             <p className="text-gray-600">Automatically sync with your Google Calendar</p>
           </div>
         </div>
